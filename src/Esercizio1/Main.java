@@ -39,7 +39,7 @@ public class Main {
 		  Cliente c3 = new Cliente(3, "Luca", 1);
 		  
 		  Ordine o1 = new Ordine(1, "in consegna", LocalDate.now() , LocalDate.of(2023, 01, 23) , ordine1 , c1);
-		  Ordine o2 = new Ordine(2, "in consegna", LocalDate.now() , LocalDate.of(2023, 01, 25), ordine2 , c2);
+		  Ordine o2 = new Ordine(2, "in consegna", LocalDate.of(2021, 03, 25) , LocalDate.of(2023, 01, 25), ordine2 , c2);
 		  Ordine o3 = new Ordine(3, "in consegna", LocalDate.now() , LocalDate.of(2023, 01, 28), ordine3 , c3);
 		  
 		  ArrayList<Ordine> listaOrdini = new ArrayList<Ordine>(Arrays.asList(o1, o2, o3)); 
@@ -59,12 +59,19 @@ public class Main {
 		    
 		    System.out.println("----------------------------------");
 			  System.out.println("Stampo una lista di prodotti appartenenti alla categoria BOYS ");
-			  ArrayList<Prodotto> listaFiltrata2 = new ArrayList<>();
 			    prodotti.stream()
 			            .filter((prodotto) -> prodotto.getCategoria() == "Boys")
 			            .peek(prezzo -> prezzo.setPrezzo(prezzo.getPrezzo() - (prezzo.getPrezzo() * 10) / 100)).
 			            forEach((prodotto) -> System.out.println(prodotto));
 			           
+			    
+			    System.out.println( "---------------------------------------" );
+				System.out.println( "Ordini di clienti con livello 2, ordinati tra il 01-Feb-2021 e l'01-Apr-2021:" );
+		        listaOrdini.stream()
+		        	.filter( (o) -> o.getDataOrdine().isAfter(LocalDate.of(2021, 02, 01))
+		        	&& o.getDataOrdine().isBefore(LocalDate.of(2021, 04, 01))
+		        	&& o.getCliente().getLivello() == 2)
+		        	.forEach((o) -> System.out.println(o));
 			  
 			    
 	}
@@ -125,6 +132,14 @@ class Ordine {
 		return this.prodotti;
 	}
 	
+	public LocalDate getDataOrdine() {
+		return this.dataOrdine;
+	}
+	
+	public Cliente getCliente() {
+		return this.cliente;
+	}
+	
 	@Override
 	  public String toString() {
 	    return "ID - " + this.id + " stato ordine: " + this.stato + " data ordine: " + this.dataOrdine + " data consegna: " + this.dataConsegna + " prodotti: " + this.prodotti + " Cliente: " + this.cliente;
@@ -144,6 +159,10 @@ class Cliente {
 		this.id = id;
 		this.nome = nome;
 		this.livello = livello;
+	}
+	
+	public int getLivello() {
+		return this.livello;
 	}
 	
 	@Override
